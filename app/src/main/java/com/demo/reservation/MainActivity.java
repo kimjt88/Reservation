@@ -9,6 +9,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -17,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TimePicker time;
     CalendarView cal;
     Button bt_reserve;
-
+    String date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +46,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rd_time.setOnClickListener(this);
         bt_reserve.setOnClickListener(this);
 
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        Date d= new Date();
+//        String today = sdf.format(d);
+
+        tv_today.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+        // 날자가져올때 사용하는 리스너
+        cal.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
+                date = year +"-"+(month+1)+"-"+day;
+            }
+        });
+
         time.setVisibility(View.INVISIBLE);
         cal.setVisibility(View.INVISIBLE);
         //소스는 존재하지만 사용자 눈에는 보이지 않는다.
@@ -59,7 +78,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 time.setVisibility(View.VISIBLE);
                 cal.setVisibility(View.INVISIBLE);
                 break;
-            case R.id.bt_reserve : break;
+            case R.id.bt_reserve :
+
+
+
+                Calendar curDate = Calendar.getInstance();
+                curDate.setTimeInMillis(cal.getDate());
+
+                //date
+                String arr[] = date.split("-");
+                tv_year.setText(arr[0]);
+                tv_month.setText(arr[1]);
+                tv_day.setText(arr[2]);
+                tv_hour.setText(Integer.toString(time.getHour()));
+                tv_minute.setText(Integer.toString(time.getMinute()));
+                break;
 
         }
     }
